@@ -2,10 +2,10 @@
 <widget id="com.pgg.fateapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>FateApp</name>
     <description>
-        Hello World sample application that responds to the deviceready event.
+        FateApp is an electronic character sheet for the FATE Core System.
     </description>
-    <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+    <author email="gauvin.patrick@gmail.com" href="https://www.twitter.com/patgauvingeek">
+        Patrick Gauvin
     </author>
     <content src="index.html" />
     <preference name="permissions" value="none" />
