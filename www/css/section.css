@@ -1,0 +1,337 @@
+
+
+.title
+{
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: black;
+  padding: 4px;
+  margin: 4px;
+}
+
+.ladder-title
+{
+  font-size: 12px;
+  padding-left: 2px;
+  margin-top: 10px;
+}
+
+.dialog-element
+{
+  padding: 4px;
+  margin: 4px;
+}
+
+.border
+{
+  border: 1px solid black;
+  padding: 4px;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-top: 4px;
+  min-height: 20px;
+}
+
+/* Elements whose class attribute begins with "col-" */
+[class*="col-"] 
+{  
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.label
+{
+  font-size: 10px;
+  color: grey;
+  float: left;
+}
+
+.content
+{
+  font-size: 14px;
+}
+
+.row 
+{
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.thumbnail
+{
+  border: 0px;
+  margin-bottom: 0px;
+}
+
+.img-avatar
+{
+  border: 0px;
+  height: 120px !important;  
+}
+
+.btn-add
+{
+  color: green;
+  padding: 4px;
+  margin: 4px;
+}
+
+.btn-up-down
+{
+  color: blue; 
+  padding: 4px;
+  margin: 4px;
+  margin-left: 10px;
+}
+
+.btn-up-down:disabled
+{
+  color: grey;
+}
+
+.btn-delete
+{
+  color: darkred; 
+  padding: 4px;
+  margin: 4px;
+  margin-left: 10px;
+}
+
+.editable-click, a.editable-click
+{
+  color: black;
+}
+
+.stress-value
+{
+  font-size: 16px;
+  margin-top: 10px;
+  margin-right: 2px;
+  text-align: right;
+}
+
+.stress-box
+{
+  width: 32px;
+  height: 32px;
+}
+
+div.section
+{
+}
+
+div.csheet
+{
+}
+
+div.csheet_id
+{
+  margin: auto;
+  background: url("../img/logo.gif");
+  background-size: calc(20% - 50px) auto;
+  background-repeat: no-repeat;
+  background-position: right 25px top;
+}
+
+div.csheet_id table
+{
+  width: 80%;
+  border-spacing: 10px;
+  border-collapse: separate;
+}
+
+div.csheet_aspects
+{
+  float: left;
+  width: 50%;
+}
+
+div.csheet_aspects table
+{
+  width: 100%;
+  border-spacing: 10px;
+  border-collapse: separate;
+}
+
+div.csheet_skills
+{
+  float: right;
+  width: 50%;
+}
+
+div.csheet_skills table
+{
+  width: 100%;
+  border-spacing: 10px;
+  border-collapse: separate;
+}
+
+div.csheet_skills td
+{
+  width: 20%
+}
+
+div.csheet_extras
+{
+  float: left;
+  width: 50%;
+}
+
+div.csheet_extras table
+{
+  width: 100%;
+  border-spacing: 10px;
+  border-collapse: separate;
+}
+
+div.csheet_extras div.title
+{
+  font-weight: bold;
+}
+
+div.csheet_stunts
+{
+  float: right;
+  width: 50%;
+}
+
+div.csheet_stunts div.title
+{
+  font-weight: bold;
+}
+
+div.csheet_stunts div.description
+{
+}
+
+div.csheet_stunts table
+{
+  width: 100%;
+  border-spacing: 10px;
+  border-collapse: separate;
+}
+
+div.csheet_stress_tracks
+{
+  float: left;
+  width: 50%;
+}
+
+div.csheet_stress_tracks table
+{
+  width: 100%;
+  border-spacing: 10px;
+  border-collapse: separate;
+}
+
+div.csheet_consequences
+{
+  float: right;
+  width: 50%;
+}
+
+div.csheet_consequences table
+{
+  width: 100%;
+  border-spacing: 10px 0px;
+  border-collapse: separate;
+}
+
+div.csheet_consequences input
+{
+  width: 100%;
+  border: 1px solid;
+  padding: 5px;
+}
+
+div.csheet td
+{
+  font-size: 1vw;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+div.csheet td div.label
+{
+  font-size: 0.6vw;
+  color: grey;
+  float: left;
+}
+
+div.csheet td.ladder
+{
+  width: 1px;
+  white-space: nowrap;
+  border: 0px;
+  color: grey;
+}
+
+div.csheet td.stress_label
+{
+  width: 5px;
+  white-space: nowrap;
+  font-size: 0.8vw;
+  border: 0px;
+  color: grey;
+  text-align: right;
+  vertical-align: center;
+}
+
+div.csheet tr.stress_box_row
+{
+}
+
+div.csheet td.stress_box_col
+{
+  padding: 5px;
+  border: 0px
+}
+
+div.csheet td.stress_fill
+{
+  width: 100%;
+  border: 0px
+}
+
+div.csheet td.consequence_td
+{
+  border: 0px;
+  padding: 0px;
+}
+
+div.csheet td div.content
+{
+  font-size: 1vw;
+}
+
+
+table.consequence_table
+{
+  border-spacing: 0px;
+  border-collapse: collapse;
+}
+
+table.consequence_table td
+{
+  color: black;
+  font-size: 1vw;
+  border: 0px solid black;
+}
+
+table.consequence_table td.severity
+{
+  width: 1px;
+  color:grey;
+  font-size: 0.8vw;
+  text-align: right;
+}
+
+table.consequence_table td.label
+{
+  width: 1px;
+  color: grey;
+  font-size: 0.6vw;
+  text-align: right;
+  vertical-align: top;
+}

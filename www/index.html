@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<!--
+  Copyright (c) 2012-2014 Adobe Systems Incorporated. All rights reserved.
+
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html ng-app="fateAppNav">
+  <head>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+
+    <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.min.css">
+    <script src="bower_components/angular-xeditable/dist/js/xeditable.min.js"></script>
+    
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/migrator.js"></script>
+    <script type="text/javascript" src="js/fateDb.js"></script>
+
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="css/table.css" />
+    <link rel="stylesheet" type="text/css" href="css/section.css" />
+
+    <title>FateApp</title>
+  </head>
+  <body ng-controller="fateAppNavCtrl">
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#fateAppNav">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="navbar-brand">FateApp</div>
+        </div>
+        <div class="collapse navbar-collapse" id="fateAppNav">
+          <ul class="nav navbar-nav">
+            <li ng-class="navClass('characters')"><a href="#" ng-click="goto('characters')">Characters</a></li>
+            <li ng-class="navClass('settings')"><a href="#" ng-click="goto('settings')">Settings</a></li>
+            <li ng-class="navClass('tools')"><a href="#" ng-click="goto('tools')">Tools</a></li>
+            <li>
+              <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div ng-show="page == 'tools'">
+      <div class="container">
+        <h1>Tools</h1>
+        <div class="row">
+          <div class="col-sm-12">
+            <textarea cols="80" rows="3" ng-model="Sql">{{Sql}}</textarea>
+            <Button class="btn btn-warning" ng-click="executeSql();">Execute SQL</Button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">
+            <Button class="btn btn-danger" ng-click="resetDatabase();">Reset Database</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-show="page == 'settings'">
+      <div ng-controller="fateAppSettingsCtrl">
+        <div class="container">
+          <h1>Settings</h1>
+          <ul>
+            <li ng-repeat="s in Settings">
+              <a href="#" ng-click="gotoItem('setting', s.id)">{{s.name}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div ng-show="page == 'setting'">
+      <div ng-controller="fateAppSettingCtrl">
+        <div class="container">
+          <h1 class="tagged">{{Name}}</h1>
+          <p class="tag" ng-show="IsReadonly == 1">readonly</p>
+          <div class="section">
+            <h2>Aspect</h2>
+            <Table class="fateAppTable">
+              <tr>
+                <td>Name</td>
+                <td>Description</td>
+              </tr>
+              <tr ng-repeat="a in Aspects">
+                <td>{{a.name}}</td>
+                <td>{{a.description}}</td>
+              </tr>
+            </Table>
+          </div>
+          <div class="section">
+            <h2>Skills</h2>
+            <Table class="fateAppTable">
+              <tr>
+                <td>Name</td>
+                <td>Description</td>
+              </tr>
+              <tr ng-repeat="s in Skills">
+                <td>{{s.name}}</td>
+                <td>{{s.description}}</td>
+              </tr>
+            </Table>
+          </div>
+          <div class="section">
+            <h2>Stress Tracks</h2>
+            <Table class="fateAppTable">
+              <tr>
+                <td>Name</td>
+                <td>Description</td>
+              </tr>
+              <tr ng-repeat="t in StressTracks">
+                <td>{{t.name}}</td>
+                <td>{{t.description}}</td>
+              </tr>
+            </Table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-show="page == 'characters'">
+      <div ng-controller="fateAppCharactersCtrl">
+        <div class="container">
+          <h1>
+            Characters
+            <button style="margin: 5px; margin-left: 20px;" class="btn btn-success" ng-click="addCharacter();">
+              <span class="glyphicon glyphicon-plus-sign"></span>
+            </button>
+          </h1>
+          <div class="row" ng-repeat="campaign in Campaigns">
+            <div class="col-sm-1"><h3>{{campaign.name || '?'}}</h3></div>
+            <div class="col-sm-2" ng-repeat="c in campaign.Characters">
+              <div class="thumbnail" style="cursor: pointer;" ng-click="gotoItem('character', c.id)">
+                <img class="img-avatar group list-group-image" ng-src="{{c.imageSource || 'img/default.gif'}}"></img>
+                <div style="text-align: center;" class="caption">
+                  <h4 class="group inner list-group-item-heading">
+                    {{c.name || '?'}}
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-show="page == 'character'">
+      <div ng-controller="fateAppCharacterCtrl as $ctrl">
+        <script type="text/ng-template" id="identificationDialog.html">
+          <div class="modal-header">
+            <h3 class="modal-title">Character Identfication</h3>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="col-sm-4">
+                <div class="dialog-element">Name:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <input class="form-control" type="text" ng-model="$ctrl.name"></input>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="dialog-element">Campaign:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <input class="form-control" type="text" ng-model="$ctrl.campaign"
+                         uib-typeahead="campaignOption for campaignOption in $ctrl.campaignOptions | filter:$viewValue | limitTo:8"></input>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="dialog-element">Player:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <input class="form-control" type="text" ng-model="$ctrl.player"></input>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="dialog-element">Refresh:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <input class="form-control" type="number" ng-model="$ctrl.refresh"></input>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="dialog-element">Portrait:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <input class="form-control" type="text" ng-model="$ctrl.imageSource"></input>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="dialog-element">Description:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <textarea rows="8" class="form-control" type="text" ng-model="$ctrl.description"></textarea>
+                </div>
+              </div>
+            </div>            
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger" type="button" style="float: left;" ng-click="$ctrl.delete()">Delete</button>
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+          </div>
+        </script>
+        <script type="text/ng-template" id="skillDialog.html">
+          <div class="modal-header">
+            <h3 class="modal-title">Update Skill</h3>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="col-sm-4">
+                <div class="dialog-element">Name:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <input class="form-control" type="text" ng-model="$ctrl.skillName"
+                         uib-typeahead="skill for skill in $ctrl.defaultSkills | filter:$viewValue | limitTo:8"></input>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="dialog-element">Bonus:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <input class="form-control" type="number" ng-model="$ctrl.skillBonus"></input>
+                </div>
+              </div>
+            </div>            
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger" type="button" style="float: left;" ng-click="$ctrl.delete()">Delete</button>
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+          </div>
+        </script>
+        <script type="text/ng-template" id="extraOrStuntDialog.html">
+          <div class="modal-header">
+            <h3 class="modal-title">Update {{$ctrl.elementType}}</h3>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="col-sm-1">
+                <div class="dialog-element">Name:</div>
+              </div>
+              <div class="col-sm-11">
+                <div class="dialog-element">
+                  <input class="form-control" type="text" ng-model="$ctrl.name"></input>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <div class="dialog-element">Description:</div>
+              </div>
+              <div class="col-sm-12">
+                <div class="dialog-element">
+                  <textarea class="form-control" ng-model="$ctrl.description" rows="4" cols="50">{{$ctrl.description}}</textarea>
+                </div>
+              </div>
+            </div>            
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger" type="button" style="float: left;" ng-click="$ctrl.delete()">Delete</button>
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+          </div>
+        </script>
+        <script type="text/ng-template" id="stressTrackDialog.html">
+          <div class="modal-header">
+            <h3 class="modal-title">Update Stress Track</h3>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="col-sm-4">
+                <div class="dialog-element">Name:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <input class="form-control" type="text" ng-model="$ctrl.name"></input>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="dialog-element">Skill:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <input class="form-control" type="text" ng-model="$ctrl.skillName"
+                         uib-typeahead="skill for skill in $ctrl.defaultSkills | filter:$viewValue | limitTo:8"></input>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="dialog-element">Boxes:</div>
+              </div>
+              <div class="col-sm-1">
+                <div class="dialog-element">
+                  <input type="radio" ng-model="$ctrl.activeBoxCount" ng-value="1">1</input>
+                </div>
+              </div>
+              <div class="col-sm-1">
+                <div class="dialog-element">
+                  <input type="radio" ng-model="$ctrl.activeBoxCount" ng-value="2">2</input>
+                </div>
+              </div>
+              <div class="col-sm-1">
+                <div class="dialog-element">
+                  <input type="radio" ng-model="$ctrl.activeBoxCount" ng-value="3">3</input>
+                </div>
+              </div>
+              <div class="col-sm-1">
+                <div class="dialog-element">
+                  <input type="radio" ng-model="$ctrl.activeBoxCount" ng-value="4">4</input>
+                </div>
+              </div>
+            </div>            
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger" type="button" style="float: left;" ng-click="$ctrl.delete()">Delete</button>
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+          </div>
+        </script>
+        <script type="text/ng-template" id="consequenceSlotDialog.html">
+          <div class="modal-header">
+            <h3 class="modal-title">Update Consequence Slot</h3>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="col-sm-4">
+                <div class="dialog-element">Severity:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <input class="form-control" type="number" ng-model="$ctrl.severity"></input>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="dialog-element">Type:</div>
+              </div>
+              <div class="col-sm-8">
+                <div class="dialog-element">
+                  <input class="form-control" type="text" ng-model="$ctrl.type"
+                         uib-typeahead="stressTrackName for stressTrackName in $ctrl.stressTrackNames | filter:$viewValue | limitTo:8"></input>
+                </div>
+              </div>
+            </div>            
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger" type="button" style="float: left;" ng-click="$ctrl.delete()">Delete</button>
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+          </div>
+        </script>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12 col-lg-9">
+              <div class="title">
+                Id
+                <button class="btn btn-up-down" ng-click="$ctrl.showIdentificationDialog()">
+                  <span class="glyphicon glyphicon-pencil" />
+                </button>
+              </div>
+              <div class="col-sm-8 col-lg-10">
+                <div class="col-sm-12">
+                  <div class="border">
+                    <div class="label">Name</div>
+                    <div class="content">{{Name}}</div>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="border">
+                    <div class="label">Campaign</div>
+                    <div class="content">{{Campaign}}</div>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="border">
+                    <div class="label">Player</div>
+                    <div class="content">{{Player}}</div>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="border">
+                    <div class="label">Description</div>
+                    <div class="content">
+                      <p>{{Description}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4 col-lg-2">
+                <div class="border">
+                  <div class="thumbnail">
+                    <img class="img-avatar" ng-src="{{imageSource || 'img/default.gif'}}"></img>
+                  </div>
+                </div>
+                <div class="border">
+                  <div class="label">Refresh</div>
+                  <div class="content">{{Refresh}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-lg-3">
+              <div class="thumbnail">
+                <img src="img/logo.gif" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-lg-6">
+              <div class="title">
+                Aspects
+                <button class="btn btn-add" ng-click="addAspect()">
+                  <span class="glyphicon glyphicon-plus-sign" />
+                </button>
+              </div>
+              <div ng-repeat="a in Aspects">
+                <table>
+                  <tr>
+                    <td width="99%">
+                      <div class="border">
+                        <div class="label" ng-if="a.position == 0">High Concept</div>
+                        <div class="label" ng-if="a.position == 1">Trouble</div>
+                        <div class="content">
+                          <a href="#" editable-text="a.name" onbeforesave="updateCharacterAspectName(a.id, $data)">{{a.name || 'Empty'}}</a>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <button class="btn btn-up-down" ng-disabled="a.position == 0" ng-click="moveAspectUp(a)">
+                        <span class="glyphicon glyphicon-arrow-up" />
+                      </button>
+                    </td>
+                    <td>
+                      <button class="btn btn-up-down"  ng-disabled="a.position == Aspects.length - 1" ng-click="moveAspectDown(a)">
+                        <span class="glyphicon glyphicon-arrow-down" />
+                      </button>
+                    </td>
+                    <td>
+                      <button class="btn btn-delete" style="color: darkred" ng-click="deleteAspect(a)">
+                        <span class="glyphicon glyphicon-remove-sign" />
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="col-sm-12 col-lg-6">
+              <div class="title">
+                Skills
+                <button class="btn btn-add" ng-click="addSkill()">
+                  <span class="glyphicon glyphicon-plus-sign" />
+                </button>
+              </div>
+              <div ng-repeat="l in Ladder">
+                <div class="row">
+                  <div class="col-sm-2">
+                    <div class="ladder-title">{{getBonusText(l.bonus)}}</div>
+                  </div>
+                  <div class="col-sm-2" ng-repeat="s in l.Skills">
+                    <div class="border">
+                      <a href="#" ng-click="$ctrl.showSkillDialog(s)">
+                        {{s.name || 'Empty'}}
+                      </a>
+                    </div>
+                  </div>
+                </div>  
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-lg-6">
+              <div class="title">
+                Extras
+                <button class="btn btn-add" ng-click="addExtra()">
+                  <span class="glyphicon glyphicon-plus-sign" />
+                </button>
+              </div>
+              <div class="border">
+                <div ng-repeat="e in Extras">
+                  <a href="#" ng-click="$ctrl.showExtraOrStuntDialog('Extra', e)">
+                    <span style="font-weight: bold;">{{e.name || 'Empty'}}: </span>
+                    <span>{{e.description || 'Empty'}}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-lg-6">
+              <div class="title">
+                Stunts
+                <button class="btn btn-add" ng-click="addStunt()">
+                  <span class="glyphicon glyphicon-plus-sign" />
+                </button>
+              </div>
+              <div class="border">
+                <div ng-repeat="s in Stunts">
+                  <a href="#" ng-click="$ctrl.showExtraOrStuntDialog('Stunt', s)">
+                    <span style="font-weight: bold;">{{s.name || 'Empty'}}: </span>
+                    <span>{{s.description || 'Empty'}}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-lg-4">
+              <div class="col-sm-12" ng-if="StressTracks.length == 0">
+                <div class="title">
+                  Stress Tracks
+                  <button class="btn btn-add" ng-click="addStressTrack()">
+                    <span class="glyphicon glyphicon-plus-sign" />
+                  </button>
+                </div>
+              </div>
+              <div ng-repeat="s in StressTracks">
+                <div class="col-sm-12">
+                  <div class="title">
+                    {{s.name || 'Empty'}} Stress {{s.skillName ? '(' + s.skillName + ')' : ''}}
+                    <button class="btn btn-up-down" ng-click="$ctrl.showStressTrackDialog(s)">
+                      <span class="glyphicon glyphicon-pencil" />
+                    </button>
+                    <button ng-if="$index == 0" class="btn btn-add" ng-click="addStressTrack()">
+                      <span class="glyphicon glyphicon-plus-sign" />
+                    </button>
+                  </div>
+                </div>
+                <table>
+                  <tr>
+                    <td width="12%">
+                      <div class="stress-value">1</div>
+                    </td>
+                    <td width="12%">
+                      <input ng-disabled="s.activeBoxCount < 1"
+                            ng-model="s.isBox1Checked"
+                            ng-change="s.update()"
+                            class="stress-box" type="checkbox" value="1"></input>
+                    </td>
+                    <td width="12%">
+                      <div class="stress-value">2</div>
+                    </td>
+                    <td width="12%">
+                      <input ng-disabled="s.activeBoxCount < 2"
+                            ng-model="s.isBox2Checked"
+                            ng-change="s.update()"
+                            class="stress-box" type="checkbox" value="2"></input>
+                    </td>
+                    <td width="12%">
+                      <div class="stress-value">3</div>
+                    </td>
+                    <td width="12%">
+                      <input ng-disabled="s.activeBoxCount < 3"
+                            ng-model="s.isBox3Checked"
+                            ng-change="s.update()"
+                            class="stress-box" type="checkbox" value="4"></input>
+                    </td>
+                    <td width="12%">
+                      <div class="stress-value">4</div>
+                    </td>
+                    <td width="12%">
+                      <input ng-disabled="s.activeBoxCount < 4"
+                            ng-model="s.isBox4Checked"
+                            ng-change="s.update()"
+                            class="stress-box" type="checkbox" value="8"></input>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="col-sm-12 col-lg-8">
+              <div class="col-sm-12">
+                <div class="title">
+                  Concequences
+                  <button class="btn btn-add" ng-click="addConsequenceSlot()">
+                    <span class="glyphicon glyphicon-plus-sign" />
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-6" ng-repeat="c in Consequences">
+                <table>
+                  <tr>
+                    <td>
+                      <div class="stress-value">{{c.severity}}</div>
+                    </td>
+                    <td width="99%">
+                      <div class="border">
+                        <div class="label">{{getConsequenceText(c)}}</div>
+                        <div class="content">
+                          <a e-style="width:165px;" href="#" editable-text="c.name" onbeforesave="updateConsequence(c.id, $data)">{{c.name || 'Empty'}}</a>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <button class="btn btn-up-down" ng-click="$ctrl.showConsequenceSlotDialog(c)">
+                        <span class="glyphicon glyphicon-pencil" />
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div> 
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-lg-12">
+              <div class="title">
+                Tools
+              </div>
+              <ul>
+                <li><a href="#" ng-click="exportCharacter()">Export</a></li>
+              </ul>            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="js/fateAppNav.js"></script>
+    <script type="text/javascript" src="js/fateAppSettings.js"></script>
+    <script type="text/javascript" src="js/fateAppSetting.js"></script>
+    <script type="text/javascript" src="js/fateAppCharacters.js"></script>
+    <script type="text/javascript" src="js/fateAppCharacter.js"></script>
+    <script type="text/javascript" src="js/dialogs.js"></script>
+    <script type="text/javascript">
+      // initialize phonegap
+      app.initialize();
+    </script>
+  </body>
+</html>

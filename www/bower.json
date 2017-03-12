@@ -1,0 +1,28 @@
+{
+  "name": "FateApp",
+  "description": "character sheet for the FATE Core System.",
+  "main": "FateApp",
+  "keywords": [
+    "FATE",
+    "RPG"
+  ],
+  "authors": [
+    "Patrick Gauvin"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-route": "^1.6.2",
+    "angular-xeditable": "^0.6.0",
+    "bootstrap": "^3.3.7",
+    "angular-bootstrap": "^2.5.0"
+  }
+}
