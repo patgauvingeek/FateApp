@@ -1,8 +1,4 @@
-var fateAppNav = angular.module("fateAppNav", ["xeditable", "ui.bootstrap"]);
-
-fateAppNav.run(function(editableOptions) {
-  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-});
+var fateAppNav = angular.module("fateAppNav", ["ui.bootstrap"]);
 
 fateAppNav.controller('fateAppNavCtrl',
 ['$scope', '$location', function ($scope, $location)

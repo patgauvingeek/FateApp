@@ -63,6 +63,93 @@ function fateAppCharacterCtrl($scope, $uibModal)
       },
       function () { });
   };
+
+  $ctrl.showAspectDialog = function (deleteEnabled, clearEnabled, elementType, aspect) {
+    var modalInstance = $uibModal.open({
+      animation: $ctrl.animationsEnabled,
+      templateUrl: 'aspectDialog.html',
+      controller: 'aspectDialogCtrl',
+      controllerAs: '$ctrl',
+      size: 'lg',
+      appendTo: undefined,
+      resolve: {
+        deleteEnabled : function()
+        {
+          return deleteEnabled;
+        },
+        clearEnabled : function()
+        {
+          return clearEnabled;
+        },
+        elementType: function()
+        {
+          return elementType;
+        },
+        aspectName: function () {
+          return aspect.name;
+        }
+      }
+    });
+    
+    var aspectChanged = function(result)
+    {      
+      if (result.delete)
+      {
+        FateDb.transaction(function(t)
+        {
+          deleteAspect(t, aspect.id);
+          for(var aspectToMove of $scope.Aspects)
+          {
+            if (aspectToMove.position > aspect.position)
+            {
+              aspectToMove.position--;
+              updateAspectPosition(t, aspectToMove.id, aspectToMove.position);
+            }
+          }      
+        });
+        $scope.Aspects.splice(aspect.position, 1);
+        return;
+      }
+
+      FateDb.transaction(function(t)
+      {
+        updateCharacterAspectName(t, aspect.id, result.aspectName);
+      });
+      aspect.name = result.aspectName;   
+    }
+
+    var consequenceChanged = function(result)
+    {
+      if (result.delete)
+      {
+        console.error("Do not use deleteEnabled = true with consequences.");
+      }
+
+      FateDb.transaction(function(t)
+      {
+        updateConsequence(t, aspect.id, result.aspectName);
+      });
+      aspect.name = result.aspectName;
+    }
+  
+    modalInstance.result.then(
+      function (result)
+      { 
+        if (elementType == "Aspect")
+        {
+          aspectChanged(result);
+        }
+        else if (elementType == "Consequence")
+        {
+          consequenceChanged(result);
+        }
+        else
+        {
+          console.error("Unexpected element type " + elementType);
+        }
+      },
+      function () { });
+  }
   
   $ctrl.showSkillDialog = function (skill) {
     var modalInstance = $uibModal.open({
@@ -328,62 +415,6 @@ function fateAppCharacterCtrl($scope, $uibModal)
       : "AWESOME (+" + bonus +")"
   }
 
-  $scope.updateCharacterName = function(id, name)
-  {
-    FateDb.transaction(function(t)
-    {
-      updateCharacterName(t, id, name);
-    });
-  }
-
-  $scope.updateCharacterCampaign = function(id, campaign)
-  {
-    FateDb.transaction(function(t)
-    {
-      updateCharacterCampaign(t, id, campaign);
-    });
-  }
-
-  $scope.updateCharacterPlayer = function(id, player)
-  {
-    FateDb.transaction(function(t)
-    {
-      updateCharacterPlayer(t, id, player);
-    });
-  }
-
-  $scope.updateCharacterRefresh = function(id, refresh)
-  {
-    FateDb.transaction(function(t)
-    {
-      updateCharacterRefresh(t, id, refresh);
-    });
-  }
-
-  $scope.updateCharacterImageSource = function(id, imageSource)
-  {
-    FateDb.transaction(function(t)
-    {
-      updateCharacterImageSource(t, id, imageSource);
-    });
-  }
-  
-  $scope.updateCharacterDescription = function(id, description)
-  {
-    FateDb.transaction(function(t)
-    {
-      updateCharacterDescription(t, id, description);
-    });
-  }
-
-  $scope.updateCharacterAspectName = function(id, name)
-  {
-    FateDb.transaction(function(t)
-    {
-      updateCharacterAspectName(t, id, name);
-    });
-  }
-
   $scope.addAspect = function()
   {
     var aspect = new Object(); 
@@ -438,23 +469,6 @@ function fateAppCharacterCtrl($scope, $uibModal)
     $scope.Aspects.splice(wOrignalPosition, 2, wAspectToReplace, aspect);
     wAspectToReplace.position = wOrignalPosition;
     aspect.position = wTargetPosition;
-  }
-
-  $scope.deleteAspect = function(aspect)
-  {
-    $scope.Aspects.splice(aspect.position, 1);
-    FateDb.transaction(function(t)
-    {
-      deleteAspect(t, aspect.id);
-      for(var aspectToMove of $scope.Aspects)
-      {
-        if (aspectToMove.position > aspect.position)
-        {
-          aspectToMove.position--;
-          updateAspectPosition(t, aspectToMove.id, aspectToMove.position);
-        }
-      }      
-    });
   }
 
   $scope.addSkill = function()
@@ -557,11 +571,6 @@ function fateAppCharacterCtrl($scope, $uibModal)
     {
       addConsequenceSlotToCharacter(t, consequence.severity, consequence.name, consequence.type, $scope.Id, function(id) { consequence.id = id; });
     });
-  }
-
-  $scope.updateConsequence = function(id, name)
-  {
-    FateDb.transaction(function (t)  { updateConsequence(t, id, name); });
   }
 
   FateDb.dataSelectCampaignOptionsHandler = function(transaction, results)

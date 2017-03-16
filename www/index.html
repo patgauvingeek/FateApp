@@ -27,9 +27,6 @@
 
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
-
-    <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.min.css">
-    <script src="bower_components/angular-xeditable/dist/js/xeditable.min.js"></script>
     
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     
@@ -231,6 +228,26 @@
           </div>
           <div class="modal-footer">
             <button class="btn btn-danger" type="button" style="float: left;" ng-click="$ctrl.delete()">Delete</button>
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+          </div>
+        </script>
+        <script type="text/ng-template" id="aspectDialog.html">
+          <div class="modal-header">
+            <h3 class="modal-title">Update {{$ctrl.elementType}}</h3>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="col-sm-12">
+                <div class="dialog-element">
+                  <input class="form-control" type="text" ng-model="$ctrl.aspectName"></input>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button ng-if="$ctrl.deleteEnabled" class="btn btn-danger" type="button" style="float: left;" ng-click="$ctrl.delete()">Delete</button>
+            <button ng-if="$ctrl.clearEnabled" class="btn btn-warning" type="button" style="float: left;" ng-click="$ctrl.clear()">Clear</button>
             <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
             <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
           </div>
@@ -464,7 +481,7 @@
                         <div class="label" ng-if="a.position == 0">High Concept</div>
                         <div class="label" ng-if="a.position == 1">Trouble</div>
                         <div class="content">
-                          <a href="#" editable-text="a.name" onbeforesave="updateCharacterAspectName(a.id, $data)">{{a.name || 'Empty'}}</a>
+                          <a href="#" ng-click="$ctrl.showAspectDialog(true, false, 'Aspect', a)">{{a.name || 'Empty'}}</a>
                         </div>
                       </div>
                     </td>
@@ -476,11 +493,6 @@
                     <td>
                       <button class="btn btn-up-down"  ng-disabled="a.position == Aspects.length - 1" ng-click="moveAspectDown(a)">
                         <span class="glyphicon glyphicon-arrow-down" />
-                      </button>
-                    </td>
-                    <td>
-                      <button class="btn btn-delete" style="color: darkred" ng-click="deleteAspect(a)">
-                        <span class="glyphicon glyphicon-remove-sign" />
                       </button>
                     </td>
                   </tr>
@@ -627,7 +639,7 @@
                       <div class="border">
                         <div class="label">{{getConsequenceText(c)}}</div>
                         <div class="content">
-                          <a e-style="width:165px;" href="#" editable-text="c.name" onbeforesave="updateConsequence(c.id, $data)">{{c.name || 'Empty'}}</a>
+                          <a href="#" ng-click="$ctrl.showAspectDialog(false, true, 'Consequence', c)" onbeforesave="updateConsequence(c.id, $data)">{{c.name || 'Empty'}}</a>
                         </div>
                       </div>
                     </td>

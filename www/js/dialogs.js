@@ -32,6 +32,31 @@ fateAppNav.controller('identificationDialogCtrl', function ($uibModalInstance, c
   };
 });
 
+fateAppNav.controller('aspectDialogCtrl', function ($uibModalInstance, deleteEnabled, clearEnabled, elementType, aspectName) {
+  var $ctrl = this;
+
+  $ctrl.deleteEnabled = deleteEnabled;
+  $ctrl.clearEnabled = clearEnabled;
+  $ctrl.elementType = elementType;
+  $ctrl.aspectName = aspectName;
+  
+  $ctrl.ok = function () {
+    $uibModalInstance.close({aspectName:$ctrl.aspectName, delete: false});
+  };
+
+  $ctrl.clear = function () {
+    $uibModalInstance.close({aspectName:"", delete: false});
+  };
+
+  $ctrl.delete = function () {
+    $uibModalInstance.close({delete: true});
+  };
+
+  $ctrl.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+});
+
 fateAppNav.controller('skillDialogCtrl', function ($uibModalInstance, skill) {
   var $ctrl = this;
 
