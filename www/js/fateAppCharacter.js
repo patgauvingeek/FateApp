@@ -541,6 +541,17 @@ function fateAppCharacterCtrl($scope, $uibModal)
     });
   }
 
+  $scope.updateStressTrack = function(stressTrack)
+  {
+    var value = 0;
+    value += stressTrack.isBox1Checked ? 1 : 0;
+    value += stressTrack.isBox2Checked ? 2 : 0;
+    value += stressTrack.isBox3Checked ? 4 : 0;
+    value += stressTrack.isBox4Checked ? 8 : 0;
+    var id = stressTrack.id;
+    FateDb.transaction(function (t)  { updateStressBoxCheckedFlag(t, id, value); });
+  }
+
   $scope.ConsequenceText = {
      '2':'Mild',
      '4':'Moderate',
@@ -691,17 +702,6 @@ function fateAppCharacterCtrl($scope, $uibModal)
       stressTrack.isBox2Checked = (checkedFlag & 2) != 0;
       stressTrack.isBox3Checked = (checkedFlag & 4) != 0;
       stressTrack.isBox4Checked = (checkedFlag & 8) != 0;
-
-      stressTrack.update = function ()
-      {
-        var value = 0;
-        value += this.isBox1Checked ? 1 : 0;
-        value += this.isBox2Checked ? 2 : 0;
-        value += this.isBox3Checked ? 4 : 0;
-        value += this.isBox4Checked ? 8 : 0;
-        var id = this.id;
-        FateDb.transaction(function (t)  { updateStressBoxCheckedFlag(t, id, value); });
-      }
 
       $scope.StressTracks.push(stressTrack);
     }

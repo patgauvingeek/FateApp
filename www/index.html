@@ -586,7 +586,7 @@
                     <td width="12%">
                       <input ng-disabled="s.activeBoxCount < 1"
                             ng-model="s.isBox1Checked"
-                            ng-change="s.update()"
+                            ng-change="updateStressTrack(s)"
                             class="stress-box" type="checkbox" value="1"></input>
                     </td>
                     <td width="12%">
@@ -595,7 +595,7 @@
                     <td width="12%">
                       <input ng-disabled="s.activeBoxCount < 2"
                             ng-model="s.isBox2Checked"
-                            ng-change="s.update()"
+                            ng-change="updateStressTrack(s)"
                             class="stress-box" type="checkbox" value="2"></input>
                     </td>
                     <td width="12%">
@@ -604,7 +604,7 @@
                     <td width="12%">
                       <input ng-disabled="s.activeBoxCount < 3"
                             ng-model="s.isBox3Checked"
-                            ng-change="s.update()"
+                            ng-change="updateStressTrack(s)"
                             class="stress-box" type="checkbox" value="4"></input>
                     </td>
                     <td width="12%">
@@ -613,7 +613,7 @@
                     <td width="12%">
                       <input ng-disabled="s.activeBoxCount < 4"
                             ng-model="s.isBox4Checked"
-                            ng-change="s.update()"
+                            ng-change="updateStressTrack(s)"
                             class="stress-box" type="checkbox" value="8"></input>
                     </td>
                   </tr>
