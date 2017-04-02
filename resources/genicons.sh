@@ -23,3 +23,7 @@ inkscape icon.svg -w 64 -h 64 -e ../www/res/icon/webos/icon-64.png
 inkscape icon.svg -w 48 -h 48 -e ../www/res/icon/windows-phone/icon-48.png
 inkscape icon.svg -w 62 -h 62 -e ../www/res/icon/windows-phone/icon-62-tile.png
 inkscape icon.svg -w 173 -h 173 -e ../www/res/icon/windows-phone/icon-173-tile.png
+
+
+inkscape icon.svg -w 64 -h 64 -e ./dropbox/icon-64.png
+inkscape icon.svg -w 256 -h 256 -e ./dropbox/icon-256.png
