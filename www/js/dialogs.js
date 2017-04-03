@@ -1,4 +1,18 @@
 
+fateAppNav.controller('importCharacterDialogCtrl', function ($uibModalInstance, campaigns) {
+  var $ctrl = this;
+
+  $ctrl.Campaigns = campaigns;
+  
+  $ctrl.import = function () {
+    $uibModalInstance.close($ctrl.selected.item);
+  };
+
+  $ctrl.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+});
+
 fateAppNav.controller('identificationDialogCtrl', function ($uibModalInstance, campaignOptions, name, campaign, player, refresh, description, imageSource) {
   var $ctrl = this;
   

@@ -745,7 +745,7 @@ function fateAppCharacterCtrl($scope, $uibModal)
       return;
     }
 
-    var dbx = new Dropbox({ accessToken: 'I6TxZWlixBYAAAAAAAAIUi8Fg_pgZRz-yIkopZMj0bslWGkIPdPAOlzZWpDyDFGU' });
+    var dbx = new Dropbox(cDropBoxAccessTokenObject);
    
     selectMany = function(collection, selector)
     {

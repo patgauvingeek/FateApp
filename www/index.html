@@ -31,6 +31,9 @@
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     
     <script src="node_modules/dropbox/dist/Dropbox-sdk.min.js"></script>
+    <script>
+      cDropBoxAccessTokenObject = { accessToken: 'I6TxZWlixBYAAAAAAAAIUi8Fg_pgZRz-yIkopZMj0bslWGkIPdPAOlzZWpDyDFGU' };
+    </script>
 
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
@@ -145,12 +148,38 @@
       </div>
     </div>
     <div ng-show="page == 'characters'">
-      <div ng-controller="fateAppCharactersCtrl">
+      <div ng-controller="fateAppCharactersCtrl as $ctrl">
+        <script type="text/ng-template" id="importCharacterDialog.html">
+          <div class="modal-header">
+            <h3 class="modal-title">Available Characters</h3>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <ul>
+                <li ng-repeat="campaign in $ctrl.Campaigns">
+                  {{campaign.name}}
+                  <ul>
+                    <li ng-repeat="character in campaign.characters">
+                      <a href="#" ng-click="$event.preventDefault(); $ctrl.selected.item = character">{{character.name}}</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>            
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.import()">Import</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+          </div>
+        </script>
         <div class="container">
           <h1>
             Characters
             <button style="margin: 5px; margin-left: 20px;" class="btn btn-success" ng-click="addCharacter();">
               <span class="glyphicon glyphicon-plus-sign"></span>
+            </button>
+            <button style="margin: 5px;" class="btn btn-success" ng-click="$ctrl.showImportCharacterDialog();">
+              <span class="glyphicon glyphicon-download-alt"></span>
             </button>
           </h1>
           <div class="row" ng-repeat="campaign in Campaigns">
