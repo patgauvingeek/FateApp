@@ -725,8 +725,28 @@ function fateAppCharacterCtrl($scope, $uibModal)
     $scope.$apply();
   }
 
+  $scope.ToolStatus = "Ready";
+  $scope.ErrorStatus = "";
+
   $scope.exportCharacter = function()
   {
+    $scope.ToolStatus = "Exporting...";
+    $scope.ErrorStatus = "";
+
+    if ($scope.Name == "")
+    {
+      $scope.ToolStatus = "Ready" 
+      $scope.ErrorStatus = "Name is missing";
+      setTimeout(function()
+        { 
+          $scope.ErrorStatus = "" 
+          $scope.$apply();
+        }, 5000);
+      return;
+    }
+
+    var dbx = new Dropbox({ accessToken: 'I6TxZWlixBYAAAAAAAAIUi8Fg_pgZRz-yIkopZMj0bslWGkIPdPAOlzZWpDyDFGU' });
+   
     selectMany = function(collection, selector)
     {
       var output = [];
@@ -759,16 +779,27 @@ function fateAppCharacterCtrl($scope, $uibModal)
     }
     var str = JSON.stringify(character);
 
-    //Save the file contents as a DataURI
-    var dataUri = 'data:application/json_download;charset=utf-8,'+ encodeURIComponent(str);
-
-    var downloadLink = document.createElement("a");
-    downloadLink.href = dataUri;
-    downloadLink.download = $scope.Name + ".fc";
-
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
+    dbx.filesUpload({ path: "/" + (character.campaign || "NoCampaign") + "/" + character.name + ".json", contents: str, mode: 'overwrite' })
+      .then(function (response) {
+        $scope.ToolStatus = "Export completed";
+        $scope.$apply();
+        setTimeout(function()
+          { 
+            $scope.ToolStatus = "Ready" 
+            $scope.$apply();
+          }, 5000);
+      })
+      .catch(function (err) {
+        $scope.ToolStatus = "Ready" 
+        $scope.ErrorStatus = "Export failed";
+        $scope.$apply();
+        setTimeout(function()
+          { 
+            $scope.ErrorStatus = "" 
+            $scope.$apply();
+          }, 5000);
+        console.log(err);
+      });
   }
 
 }

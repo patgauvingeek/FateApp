@@ -30,6 +30,8 @@
     
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     
+    <script src="node_modules/dropbox/dist/Dropbox-sdk.min.js"></script>
+
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/migrator.js"></script>
@@ -655,13 +657,16 @@
           </div>
           <div class="row">
             <div class="col-sm-12 col-lg-12">
-              <div class="title">
-                Tools
+              <div class="title">Tools: 
+              <span ng-if="ErrorStatus == ''">{{ToolStatus}}</span>
+              <span ng-if="ErrorStatus != ''" style="color: red;">{{ErrorStatus}}</span>
               </div>
-              <ul>
-                <li><a href="#" ng-click="exportCharacter()">Export</a></li>
-              </ul>            
             </div>
+          </div>
+          <div class="row">
+            <ul>
+              <li><a href="#" ng-click="exportCharacter()">Export</a></li>
+            </ul>
           </div>
         </div>
       </div>
