@@ -67,13 +67,24 @@
           <ul class="nav navbar-nav">
             <li ng-class="navClass('characters')"><a href="#" ng-click="goto('characters')">Characters</a></li>
             <li ng-class="navClass('settings')"><a href="#" ng-click="goto('settings')">Settings</a></li>
-            <li ng-class="navClass('tools')"><a href="#" ng-click="goto('tools')">Tools</a></li>
+            <li ng-class="navClass('options')"><a href="#" ng-click="goto('options')">Options</a></li>
           </ul>
         </div>
       </div>
     </nav>
-    <div ng-show="page == 'tools'">
+    <div ng-show="page == 'options'">
       <div class="container">
+        <h1>Dropbox</h1>
+        <div class="row">
+          <div class="col-sm-12">
+            <table>
+              <tr>
+                <td><img style="margin: 12px;" src="img/dropbox.png" /></td>
+                <td><a ng-href="{{getAuthenticateWithDropboxUrl()}}">Authenticate with Dropbox</a></td>
+              </tr>
+            </table>
+          </div>
+        </div>
         <h1>Tools</h1>
         <div class="row">
           <div class="col-sm-12">

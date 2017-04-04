@@ -64,4 +64,9 @@ fateAppNav.controller('fateAppNavCtrl',
       });
   }
 
+  $scope.getAuthenticateWithDropboxUrl = function(){
+    var dbx = new Dropbox({ clientId: 'usarv8nul4pzua8' });
+    return dbx.getAuthenticationUrl('https://www.dropbox.com/1/oauth2/redirect_receiver');
+  }
+
 }]);
