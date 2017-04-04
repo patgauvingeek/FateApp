@@ -277,11 +277,10 @@ function updateConsequence(t, id, name)
   t.executeSql("UPDATE CharacterConsequences SET name = (?) WHERE id = (?);", [name, id], sqlCompletedHandler, errorHandler);
 }
 
-function addCharacter(t)
+function addCharacter(t, name, description, campaign, refresh, player, imageSource, done)
 {
-  t.executeSql("INSERT INTO Characters (name, description, campaign, refresh, player) VALUES (?, ?, ?, ?, ?);",
-    ['', '', '', 3, ''], sqlCompletedHandler, errorHandler);
-  selectCharacters(t);
+  t.executeSql("INSERT INTO Characters (name, description, campaign, refresh, player, imageSource) VALUES (?, ?, ?, ?, ?, ?);",
+    [name, description, campaign, refresh, player, imageSource], function(t,r) { done(r.insertId); }, errorHandler);
 }
 
 function updateCharacterIdentification(t, id, name, campaign, player, refresh, description, imageSource)
@@ -415,6 +414,39 @@ function updateConsequence(t, id, name)
 function deleteConsequenceSlot(t, id)
 {
   t.executeSql("DELETE FROM CharacterConsequences WHERE id = (?)", [id], sqlCompletedHandler, errorHandler);
+}
+
+function importCharacter(t, character)
+{
+  addCharacter(t, character.name, character.description, character.campaign, character.refresh, character.player, character.imageSource,
+    function(id)
+    {
+      for(var aspect of character.aspects)
+      {
+        addAspectToCharacter(t, aspect.name, aspect.position, id, function(id) {});
+      }
+      for(var skill of character.skills)
+      {
+        addSkillToCharacter(t, skill.name, skill.bonus, id, function(id) {});
+      }
+      for(var extra of character.extras)
+      {
+        addExtraToCharacter(t, extra.name, extra.description, id, function(id) {});
+      }
+      for(var stunt of character.stunts)
+      {
+        addStuntToCharacter(t, stunt.name, stunt.description, id, function(id) {});
+      }
+      for(var stressTrack of character.stressTracks)
+      {
+        addStressTrackToCharacter(t, stressTrack.name, stressTrack.skillName, stressTrack.activeBoxCount, id, function(id) {});
+      }
+      for(var consequenceSlot of character.consequences)
+      {
+        addConsequenceSlotToCharacter(t, consequenceSlot.severity, '', consequenceSlot.type, id, function(id) {});
+      }
+      selectCharacters(t);
+    });
 }
 
 initDatabase();

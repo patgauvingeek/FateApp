@@ -2,7 +2,11 @@ function fateAppCharactersCtrl($scope, $uibModal, $http)
 {
   $scope.addCharacter = function ()
   {
-    FateDb.transaction(addCharacter);
+    FateDb.transaction(function(t) 
+    { 
+      addCharacter(t, '', '', '', 3, '', '', function(id) {});
+      selectCharacters(t);
+    });
   }
 
   var $ctrl = this;
@@ -68,15 +72,15 @@ function fateAppCharactersCtrl($scope, $uibModal, $http)
             dbx.filesDownload({path: character.filename})
               .then(function(data) {
                 var downloadUrl = URL.createObjectURL(data.fileBlob);
-                console.log(downloadUrl);
-                $http({
-                  method: 'GET',
-                  url: downloadUrl
-                }).then(function successCallback(response) {
-                   console.log(response.data);
-                }, function errorCallback(response) {
-                  console.log(response);
-                });
+                $http({ method: 'GET', url: downloadUrl })
+                  .then(function successCallback(response) {
+                    FateDb.transaction(function(t) {
+                      importCharacter(t, response.data)
+                    });
+                  },
+                  function errorCallback(response) {
+                    console.log(response);
+                  });
               })
               .catch(function(error) {
                 console.error(error);
