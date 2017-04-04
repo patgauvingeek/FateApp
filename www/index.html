@@ -32,7 +32,7 @@
     
     <script src="node_modules/dropbox/dist/Dropbox-sdk.min.js"></script>
     <script>
-      cDropBoxAccessTokenObject = { accessToken: 'I6TxZWlixBYAAAAAAAAIUi8Fg_pgZRz-yIkopZMj0bslWGkIPdPAOlzZWpDyDFGU' };
+      cDropBoxAccessTokenObject = { accessToken: localStorage.getItem("fateAppDropboxAccessToken") };
     </script>
 
     <script type="text/javascript" src="cordova.js"></script>
@@ -80,10 +80,14 @@
             <table>
               <tr>
                 <td><img style="margin: 12px;" src="img/dropbox.png" /></td>
-                <td><a ng-href="{{getAuthenticateWithDropboxUrl()}}">Authenticate with Dropbox</a></td>
+                <td><a ng-href="{{authenticateWithDropboxUrl}}">Authenticate with Dropbox</a></td>
               </tr>
             </table>
           </div>
+        </div>
+        <h1>Log</h1>
+        <div class="row">
+          <p>{{log}}</p>
         </div>
         <h1>Tools</h1>
         <div class="row">
