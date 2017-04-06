@@ -72,7 +72,6 @@ function fateAppCharactersCtrl($scope, $uibModal, $http)
               function (character)
               {
                 console.log(character.filename);
-                var dbx = new Dropbox({ accessToken: localStorage.getItem(DROPBOX_ACCESS_TOKEN_KEY) });
                 dbx.filesDownload({path: character.filename})
                   .then(function(data) {
                     var downloadUrl = URL.createObjectURL(data.fileBlob);
