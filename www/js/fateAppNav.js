@@ -16,6 +16,10 @@ fateAppNav.controller('fateAppNavCtrl',
       {
         FateDb.transaction(function (t)  { selectCharacters(t) });
       } break;
+      case 'options':
+      {
+        $scope.is_associated_with_dropbox = localStorage.getItem(DROPBOX_ACCESS_TOKEN_KEY) != null;
+      } break;
     }
   }
 
@@ -54,6 +58,7 @@ fateAppNav.controller('fateAppNavCtrl',
   }
 
   $scope.Sql = "";
+  $scope.log = "";
   
   $scope.executeSql = function()
   {
@@ -64,8 +69,25 @@ fateAppNav.controller('fateAppNavCtrl',
       });
   }
   
-  var dbx = new Dropbox({ clientId: 'usarv8nul4pzua8' });
-  $scope.log = window.location.href;
-  $scope.authenticateWithDropboxUrl = dbx.getAuthenticationUrl('https://www.dropbox.com/1/oauth2/redirect_receiver');
+  $scope.forget_dropbox = function()
+  {
+    $scope.is_associated_with_dropbox = false;
+    localStorage.removeItem(DROPBOX_ACCESS_TOKEN_KEY);
+  }
+
+  $scope.authenticate_dropbox = function()
+  {
+    authenticate_dropbox_with_cordova(DROPBOX_APP_KEY, 
+      function(accessToken) {
+         localStorage.setItem(DROPBOX_ACCESS_TOKEN_KEY, accessToken);
+         $scope.is_associated_with_dropbox = true;
+         $scope.$apply();
+      },
+      function() 
+      {
+        $scope.is_associated_with_dropbox = false;
+        $scope.$apply();
+      });
+  }
 
 }]);

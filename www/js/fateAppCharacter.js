@@ -744,62 +744,76 @@ function fateAppCharacterCtrl($scope, $uibModal)
         }, 5000);
       return;
     }
-
-    var dbx = new Dropbox(cDropBoxAccessTokenObject);
-   
-    selectMany = function(collection, selector)
-    {
-      var output = [];
-      for (var item of collection)
+    register_dropbox(DROPBOX_APP_KEY, DROPBOX_ACCESS_TOKEN_KEY,
+      function(dbx)
       {
-        var subCollection = selector(item);
-        for (var subItem of subCollection)
+        selectMany = function(collection, selector)
         {
-          output.push(subItem);
+          var output = [];
+          for (var item of collection)
+          {
+            var subCollection = selector(item);
+            for (var subItem of subCollection)
+            {
+              output.push(subItem);
+            }
+          }
+          return output;
         }
-      }
-      return output;
-    }
 
-    var character =
-    {
-      id: $scope.Id,
-      name: $scope.Name,
-      campaign: $scope.Campaign,
-      player: $scope.Player,
-      description: $scope.Description,
-      imageSource: $scope.imageSource,
-      refresh: $scope.Refresh,
-      aspects: $scope.Aspects,
-      skills: selectMany($scope.Ladder, l => l.Skills),
-      extras: $scope.Extras,
-      stunts: $scope.Stunts,
-      stressTracks: $scope.StressTracks,
-      consequences: $scope.Consequences
-    }
-    var str = JSON.stringify(character);
+        var character =
+        {
+          id: $scope.Id,
+          name: $scope.Name,
+          campaign: $scope.Campaign,
+          player: $scope.Player,
+          description: $scope.Description,
+          imageSource: $scope.imageSource,
+          refresh: $scope.Refresh,
+          aspects: $scope.Aspects,
+          skills: selectMany($scope.Ladder, l => l.Skills),
+          extras: $scope.Extras,
+          stunts: $scope.Stunts,
+          stressTracks: $scope.StressTracks,
+          consequences: $scope.Consequences
+        }
+        var str = JSON.stringify(character);
 
-    dbx.filesUpload({ path: "/" + (character.campaign || "NoCampaign") + "/" + character.name + ".json", contents: str, mode: 'overwrite' })
-      .then(function (response) {
-        $scope.ToolStatus = "Export completed";
-        $scope.$apply();
-        setTimeout(function()
-          { 
+        dbx.filesUpload({ path: "/" + (character.campaign || "NoCampaign") + "/" + character.name + ".json", contents: str, mode: 'overwrite' })
+          .then(function (response) {
+            $scope.ToolStatus = "Export completed";
+            $scope.$apply();
+            setTimeout(function()
+              { 
+                $scope.ToolStatus = "Ready" 
+                $scope.$apply();
+              }, 5000);
+          })
+          .catch(function (err) {
             $scope.ToolStatus = "Ready" 
+            $scope.ErrorStatus = "Export failed";
             $scope.$apply();
-          }, 5000);
-      })
-      .catch(function (err) {
-        $scope.ToolStatus = "Ready" 
-        $scope.ErrorStatus = "Export failed";
-        $scope.$apply();
-        setTimeout(function()
-          { 
-            $scope.ErrorStatus = "" 
-            $scope.$apply();
-          }, 5000);
-        console.log(err);
-      });
+            setTimeout(function()
+              { 
+                $scope.ErrorStatus = "" 
+                $scope.$apply();
+              }, 5000);
+            console.log(JSON.stringify(err));
+          });
+        },
+        function()
+        {
+          $scope.ToolStatus = "Export cancelled";
+          $scope.ErrorStatus = "" 
+          $scope.$apply();
+          setTimeout(function()
+            { 
+              $scope.ToolStatus = "Ready" 
+              $scope.ErrorStatus = "" 
+              $scope.$apply();
+            }, 5000);
+          console.log(err);
+        });
   }
 
 }

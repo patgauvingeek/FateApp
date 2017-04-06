@@ -31,8 +31,10 @@
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     
     <script src="node_modules/dropbox/dist/Dropbox-sdk.min.js"></script>
+    <script src="js/cordova.js"></script>
     <script>
-      cDropBoxAccessTokenObject = { accessToken: localStorage.getItem("fateAppDropboxAccessToken") };
+      var DROPBOX_APP_KEY = "usarv8nul4pzua8";
+      var DROPBOX_ACCESS_TOKEN_KEY = "fateAppDropboxAccessToken";
     </script>
 
     <script type="text/javascript" src="cordova.js"></script>
@@ -80,7 +82,10 @@
             <table>
               <tr>
                 <td><img style="margin: 12px;" src="img/dropbox.png" /></td>
-                <td><a ng-href="{{authenticateWithDropboxUrl}}">Authenticate with Dropbox</a></td>
+                <td>
+                  <a href="#" ng-if="is_associated_with_dropbox == false" ng-click="authenticate_dropbox()">Authenticate with Dropbox</a>
+                  <a href="#" ng-if="is_associated_with_dropbox" ng-click="forget_dropbox()">Forget</a>
+                </td>
               </tr>
             </table>
           </div>
