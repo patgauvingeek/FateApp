@@ -16,7 +16,9 @@ function authenticate_dropbox_with_cordova(clientId, successCallback, errorCallb
       {
         // Try to avoid a browser crash on browser.close().
         window.setTimeout(function() { browser.close() }, 10);
-        errorCallback();
+        
+        error_index += error_label.length;
+        errorCallback(event.url.substring(error_index));
       }
       else
       { 

@@ -83,9 +83,10 @@ fateAppNav.controller('fateAppNavCtrl',
          $scope.is_associated_with_dropbox = true;
          $scope.$apply();
       },
-      function() 
+      function(error) 
       {
         $scope.is_associated_with_dropbox = false;
+        $scope.log = error;
         $scope.$apply();
       });
   }
