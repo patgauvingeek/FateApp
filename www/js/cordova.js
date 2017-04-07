@@ -3,7 +3,7 @@ function authenticate_dropbox_with_cordova(clientId, successCallback, errorCallb
   var dbx = new Dropbox({ clientId: clientId });
   var redirect_url = "https://www.dropbox.com/1/oauth2/redirect_receiver";
   var url = dbx.getAuthenticationUrl(redirect_url);
-  var browser = window.open(url, "_blank");
+  var browser = window.open(url, "_blank", "location=yes,closebuttoncaption=Cancel");
   var removed = false;
 
   var onEvent = function(event) {
