@@ -1,9 +1,11 @@
-function authenticate_dropbox_with_cordova(clientId, successCallback, errorCallback)
+function authenticate_dropbox_with_cordova(clientId, successCallback, errorCallback, log)
 {
   var dbx = new Dropbox({ clientId: clientId });
   var redirect_url = "https://www.dropbox.com/1/oauth2/redirect_receiver";
   var url = dbx.getAuthenticationUrl(redirect_url);
+  log(url);
   var browser = window.open(url, "_blank", "location=yes,closebuttoncaption=Cancel");
+  log(JSON.stringify(browser));
   var removed = false;
 
   var onEvent = function(event) {
@@ -54,6 +56,7 @@ function authenticate_dropbox_with_cordova(clientId, successCallback, errorCallb
   browser.addEventListener('loaderror', onEvent);
   browser.addEventListener('loadstop', onEvent);
   browser.addEventListener('exit', onEvent)
+  log("ok");
 }
 
 function register_dropbox(clientId, localStorageKey, registered, error)
