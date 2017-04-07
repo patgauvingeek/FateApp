@@ -77,7 +77,6 @@ fateAppNav.controller('fateAppNavCtrl',
 
   $scope.authenticate_dropbox = function()
   {
-    $scope.log = "starting authentication."
     authenticate_dropbox_with_cordova(DROPBOX_APP_KEY, 
       function(accessToken) {
          localStorage.setItem(DROPBOX_ACCESS_TOKEN_KEY, accessToken);
@@ -88,11 +87,6 @@ fateAppNav.controller('fateAppNavCtrl',
       {
         $scope.is_associated_with_dropbox = false;
         $scope.log = error;
-        $scope.$apply();
-      },
-      function (log)
-      {
-        $scope.log = log;
         $scope.$apply();
       });
   }
