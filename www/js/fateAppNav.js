@@ -77,7 +77,8 @@ fateAppNav.controller('fateAppNavCtrl',
 
   $scope.authenticate_dropbox = function()
   {
-    authenticate_dropbox_with_cordova(DROPBOX_APP_KEY, 
+    var dbx = new Dropbox({ clientId: DROPBOX_APP_KEY });
+    dbx.authenticateWithCordova(
       function(accessToken) {
          localStorage.setItem(DROPBOX_ACCESS_TOKEN_KEY, accessToken);
          $scope.is_associated_with_dropbox = true;
